@@ -1,0 +1,61 @@
+name: ros
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    # The CMake configure and build commands are platform agnostic and should work equally
+    # well on Windows or Mac.  You can convert this to a matrix build if you need
+    # cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ros-tooling/setup-ros@v0.2
+      with:
+        required-ros-distributions: melodic
+    - uses: ros-tooling/action-ros-ci@v0.2
+      with:
+        package-name: my_package
+        target-ros1-distro: melodic
+
+    - name: Checkout tools repo
+      uses: actions/checkout@v2
+      with:
+        #repository: my-org/my-tools
+        path: catkin_ws/src/Ros_Qt5_Gui
+    - name: install package
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: |
+        sudo apt update
+        sudo apt-get install -y ros-melodic-qt-create
+        sudo apt-get install -y ros-melodic-qt-build
+        sudo apt-get install -y qtmultimedia5-dev
+        sudo apt-get install -y python-rosdep
+    - name: rosdep init
+      run: |
+        sudo rosdep init
+        rosdep update
+        cd catkin_ws
+        rosdep install --from-paths src --ignore-src -r -y
+      
+    - name: Build
+      # Build your program with the given configuration
+      run: catkin_make
+      
+    #- name: Test
+      #working-directory: ${{github.workspace}}/build
+      # Execute tests defined by the CMake configuration.  
+      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+      #run: ctest -C ${{env.BUILD_TYPE}}
+      
