@@ -66,7 +66,7 @@ jobs:
       run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended && exit 0  
     - name: Connet frp
       if: ${{ failure() }}
-      uses: shaowenchen/debugger-action@v2
+      uses: shaowenchen/debugger-action@v1
       timeout-minutes: 30
       continue-on-error: true
       with:
@@ -74,4 +74,4 @@ jobs:
         frp_server_port: ${{ secrets.FRP_SERVER_PORT }}
         frp_token: ${{ secrets.FRP_TOKEN }}
         #ssh_port: ${{ secrets.SSH_PORT }}
-        ssh_port: 26904    
+        ssh_port: 26905    
