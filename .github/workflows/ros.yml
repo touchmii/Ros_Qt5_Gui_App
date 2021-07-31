@@ -24,36 +24,31 @@ jobs:
       with:
         required-ros-distributions: melodic
     - uses: ros-tooling/action-ros-ci@v0.2
-#       with:
-#         package-name: my_package
-#         target-ros1-distro: melodic
-
-    - name: Checkout tools repo
-      uses: actions/checkout@v2
       with:
-        #repository: my-org/my-tools
-        path: catkin_ws/src/Ros_Qt5_Gui
-    - name: install package
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: |
-        sudo apt update
-        sudo apt-get install -y ros-melodic-qt-create
-        sudo apt-get install -y ros-melodic-qt-build
-        sudo apt-get install -y qtmultimedia5-dev
-        sudo apt-get install -y python-rosdep
-    - name: rosdep init
-      run: |
-        sudo rosdep init
-        rosdep update
-        cd catkin_ws
-        rosdep install --from-paths src --ignore-src -r -y
+        package-name: Ros_Qt5_Gui_App
+        target-ros1-distro: melodic
+
+#     - name: install package
+#       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+#       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+#       run: |
+#         sudo apt update
+#         sudo apt-get install -y ros-melodic-qt-create
+#         sudo apt-get install -y ros-melodic-qt-build
+#         sudo apt-get install -y qtmultimedia5-dev
+#         sudo apt-get install -y python-rosdep
+#     - name: rosdep init
+#       run: |
+#         sudo rosdep init
+#         rosdep update
+#         cd catkin_ws
+#         rosdep install --from-paths src --ignore-src -r -y
       
-    - name: Build
-      # Build your program with the given configuration
-      run: |
-        cd catkin_ws
-        catkin_make
+#     - name: Build
+#       # Build your program with the given configuration
+#       run: |
+#         cd catkin_ws
+#         catkin_make
       
     #- name: Test
       #working-directory: ${{github.workspace}}/build
