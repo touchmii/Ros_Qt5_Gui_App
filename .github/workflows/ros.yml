@@ -24,9 +24,9 @@ jobs:
       with:
         required-ros-distributions: melodic
     - uses: ros-tooling/action-ros-ci@v0.2
-      with:
-        package-name: my_package
-        target-ros1-distro: melodic
+#       with:
+#         package-name: my_package
+#         target-ros1-distro: melodic
 
     - name: Checkout tools repo
       uses: actions/checkout@v2
@@ -51,11 +51,30 @@ jobs:
       
     - name: Build
       # Build your program with the given configuration
-      run: catkin_make
+      run: |
+        cd catkin_ws
+        catkin_make
       
     #- name: Test
       #working-directory: ${{github.workspace}}/build
       # Execute tests defined by the CMake configuration.  
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       #run: ctest -C ${{env.BUILD_TYPE}}
-      
+    - name: Pre-Install zsh on Ubuntu
+      if: ${{ failure() }}
+      run: sudo apt-get update; sudo apt-get install zsh; sudo chsh -s zsh
+        
+    - name: Install ohmyzsh on ubuntu
+      if: ${{ failure() }}
+      run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended && exit 0  
+    - name: Connet frp
+      if: ${{ failure() }}
+      uses: shaowenchen/debugger-action@v2
+      timeout-minutes: 30
+      continue-on-error: true
+      with:
+        frp_server_addr: ${{ secrets.FRP_SERVER_ADDR }}
+        frp_server_port: ${{ secrets.FRP_SERVER_PORT }}
+        frp_token: ${{ secrets.FRP_TOKEN }}
+        #ssh_port: ${{ secrets.SSH_PORT }}
+        ssh_port: 26904    
