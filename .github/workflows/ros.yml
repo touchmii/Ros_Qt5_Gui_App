@@ -23,20 +23,22 @@ jobs:
     - uses: ros-tooling/setup-ros@v0.2
       with:
         required-ros-distributions: melodic
+    - name: install package
+      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
+      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
+      run: |
+        #sudo apt update
+        sudo apt-get install -y ros-melodic-qt-create
+        sudo apt-get install -y ros-melodic-qt-build
+        sudo apt-get install -y qtmultimedia5-dev
+        #sudo apt-get install -y python-rosdep        
     - uses: ros-tooling/action-ros-ci@v0.2
       with:
         package-name: Ros_Qt5_Gui_App
         target-ros1-distro: melodic
+        skip-tests: true
 
-#     - name: install package
-#       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-#       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-#       run: |
-#         sudo apt update
-#         sudo apt-get install -y ros-melodic-qt-create
-#         sudo apt-get install -y ros-melodic-qt-build
-#         sudo apt-get install -y qtmultimedia5-dev
-#         sudo apt-get install -y python-rosdep
+
 #     - name: rosdep init
 #       run: |
 #         sudo rosdep init
